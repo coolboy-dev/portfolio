@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yug Dhawan, Backend and AI</title>
+<meta name="description" content="Backend and AI engineer. Live demos of a fraud detector test bench, a C++ server at 665k requests a second, a GST bill checker and private photo search.">
+<meta property="og:title" content="Yug Dhawan, Backend and AI">
+<meta property="og:description" content="Backend and AI engineering for startups, with live demos and the numbers behind them.">
+<meta property="og:image" content="assets/upi-city-poster.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F1F3EE; --panel:#FAFBF8; --ink:#15201B; --muted:#55615A; --rule:#CBD2C8;
+  --accent:#2B4BDB; --accent-ink:#FFFFFF; --signal:#B57A0C; --bar:#DCE1D8;
+  --good:#1E7B4A; --warn:#A86A00; --bad:#B3261E;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1513; --panel:#161E1B; --ink:#E3E8E2; --muted:#9AA69E; --rule:#2C3833;
+    --accent:#8EA4FF; --accent-ink:#0F1513; --signal:#E0A93A; --bar:#24302B;
+    --good:#5BC489; --warn:#E0A93A; --bad:#F2867E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1513; --panel:#161E1B; --ink:#E3E8E2; --muted:#9AA69E; --rule:#2C3833;
+  --accent:#8EA4FF; --accent-ink:#0F1513; --signal:#E0A93A; --bar:#24302B;
+  --good:#5BC489; --warn:#E0A93A; --bad:#F2867E; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ground);color:var(--ink);font:16px/1.6 var(--body);margin:0}
+img,video{max-width:100%;display:block}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:0 64px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header.top{position:sticky;top:0;z-index:5;background:var(--ground);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:14px;border-bottom:1px solid var(--rule)}
+.name{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.top nav{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:14px}
+.top nav a{color:var(--ink);text-decoration:none}
+.top nav a:hover{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:10px 15px;font:500 15px var(--body);cursor:pointer;text-decoration:none}
+.btn.small{padding:7px 12px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.btn svg{width:16px;height:16px}
+
+.hero{padding-block:56px 36px;max-width:820px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.2vw,58px);line-height:1.04;letter-spacing:-.025em;margin:0 0 20px;text-wrap:balance}
+.lede{font-size:18px;max-width:38em;margin:0 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.fine{font-size:13px;color:var(--muted);margin-top:14px}
+
+.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--rule);margin-bottom:24px}
+.feat{padding:18px 18px 18px 0}
+.feat + .feat{padding-left:18px;border-left:1px solid var(--rule)}
+.feat .n{font-family:var(--mono);font-weight:500;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.02em;line-height:1.1}
+.feat .l{font-size:13px;color:var(--muted);margin-top:4px}
+
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px;margin:48px 0 8px}
+.sec-h h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,32px);letter-spacing:-.015em;margin:0}
+.sec-h span{font-size:14px;color:var(--muted)}
+
+.proj{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(20px,4vw,48px);padding-block:40px;border-bottom:1px solid var(--rule);align-items:start}
+.proj .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--signal);margin:0 0 8px}
+.proj h3{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,28px);line-height:1.15;letter-spacing:-.015em;margin:0 0 12px;text-wrap:balance}
+.proj p{margin:0 0 12px;max-width:36em}
+.stack{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:12px 0 0}
+.links{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-top:12px}
+.figs{display:flex;gap:28px;flex-wrap:wrap;margin:16px 0 4px}
+.fig .n{font-family:var(--mono);font-weight:500;font-size:22px;line-height:1.1}
+.fig .l{font-size:12.5px;color:var(--muted)}
+.private{font-size:13px;color:var(--muted);font-style:italic}
+
+.demo{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:16px;min-width:0}
+.demo-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.demo-h b{font:600 14px var(--body)}
+.demo-h span{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.demo video,.demo img{border-radius:6px;width:100%;background:#000}
+.note{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.seg button{font:500 13px var(--mono);background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:5px;padding:5px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+
+.bars{display:grid;gap:10px}
+.brow{display:grid;grid-template-columns:118px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:13.5px}
+.brow .track{height:14px;background:var(--bar);border-radius:2px;position:relative;overflow:hidden}
+.brow .fill{position:absolute;inset:0 auto 0 0;background:var(--muted);border-radius:2px;transition:width .35s ease}
+.brow.me .fill{background:var(--accent)}
+.brow.me .lbl{font-weight:600}
+.brow .v{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;white-space:nowrap}
+.brow .v small{display:block;color:var(--muted);font-size:11px}
+
+.lb .brow{grid-template-columns:150px minmax(0,1fr) 50px}
+.lb .chance{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+
+.bill{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.receipt{font-family:var(--mono);font-size:12.5px;background:var(--ground);border:1px dashed var(--rule);border-radius:6px;padding:12px;line-height:1.55}
+.receipt .r{display:flex;justify-content:space-between;gap:8px}
+.receipt hr{border:0;border-top:1px dashed var(--rule);margin:6px 0}
+.receipt input{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:2px 5px;width:100%;max-width:180px;text-align:right}
+.receipt label{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.verdict{border-radius:6px;padding:12px;border:1px solid var(--rule);background:var(--ground)}
+.verdict .vv{font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.02em}
+.verdict[data-v="approve"] .vv{color:var(--good)}
+.verdict[data-v="review"] .vv{color:var(--warn)}
+.verdict[data-v="reject"] .vv{color:var(--bad)}
+.verdict ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+.verdict .t{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:8px}
+
+.steps{margin:6px 0 0;padding-left:20px;font-size:14px;display:grid;gap:6px}
+.tabs-img img{aspect-ratio:1400/876;object-fit:cover;object-position:top}
+
+.example{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px 12px;align-items:center;margin:14px 0}
+.example .in{background:var(--ground);border:1px solid var(--rule);border-radius:5px;padding:6px 8px;overflow-wrap:anywhere}
+.example .arr{color:var(--muted)}
+.example .out{color:var(--accent);font-weight:500}
+
+.more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:8px}
+.more article{padding:22px 22px 22px 0}
+.more article + article{padding-left:22px;border-left:1px solid var(--rule)}
+.more h3{font-family:var(--display);font-weight:500;font-size:20px;margin:0 0 6px}
+.more .n{font-family:var(--mono);font-size:24px;font-weight:500}
+.more p{margin:6px 0 0;font-size:15px}
+
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:20px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+.step{padding:22px;border-left:1px solid var(--rule)}
+.step:first-child{border-left:0}
+.step .k{font-family:var(--mono);font-size:12px;color:var(--signal);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+.step h3{font-family:var(--display);font-weight:500;font-size:20px;margin:0 0 8px}
+.step p{margin:0;font-size:15px}
+
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;margin-top:56px;padding:32px;border-radius:10px;background:var(--ink);color:var(--ground)}
+.contact h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.4vw,36px);letter-spacing:-.02em;line-height:1.1;margin:0 0 10px;text-wrap:balance}
+.contact p{margin:0;opacity:.85}
+.contact a{color:var(--ground)}
+.mailbox{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.addr{font-family:var(--mono);font-size:15px;background:rgba(127,127,127,.2);padding:10px 12px;border-radius:6px;user-select:all;word-break:break-all}
+.contact .btn{background:var(--ground);color:var(--ink)}
+.contact .meta{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:14px;margin-top:14px}
+footer{font-size:13px;color:var(--muted);margin-top:28px}
+
+@media (max-width:900px){
+  .proj{grid-template-columns:1fr}
+  .contact{grid-template-columns:1fr}
+  .feats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .feat:nth-child(3){padding-left:0;border-left:0}
+  .feat:nth-child(n+3){border-top:1px solid var(--rule)}
+}
+@media (max-width:640px){
+  .bill{grid-template-columns:1fr}
+  .more,.how{grid-template-columns:1fr}
+  .more article + article{padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  .step{border-left:0;border-top:1px solid var(--rule)}
+  .step:first-child{border-top:0}
+  .brow{grid-template-columns:84px minmax(0,1fr) 80px;font-size:12.5px}
+  .lb .brow{grid-template-columns:110px minmax(0,1fr) 44px}
+  .top nav .hide-sm{display:none}
+  .contact{padding:22px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.brow .fill{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="name" href="#">Yug Dhawan</a>
+    <nav aria-label="Sections">
+      <a class="hide-sm" href="#work">Work</a>
+      <a class="hide-sm" href="#how">How we'd work</a>
+      <a class="hide-sm" href="#contact">Contact</a>
+      <a class="btn small" href="assets/Yug_Dhawan_Resume.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>Resume</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Backend and AI engineering for startups</p>
+    <h1>I add AI to products that already exist, and build the backends that hold them up.</h1>
+    <p class="lede">Every project below has a demo you can watch or run right here, and every number comes from the project's own repo.</p>
+    <div class="cta">
+      <a class="btn" href="#contact">Tell me what you're building</a>
+      <a class="btn ghost" href="assets/Yug_Dhawan_Resume.pdf" download>Download resume (PDF)</a>
+    </div>
+    <p class="fine">New Delhi, IST (UTC+5:30). That covers a full European working day and US mornings.</p>
+  </section>
+
+  <div class="feats" role="list">
+    <div class="feat" role="listitem"><div class="n">~665k</div><div class="l">requests a second from a C++ server I wrote, level with nginx</div></div>
+    <div class="feat" role="listitem"><div class="n">320,000</div><div class="l">users protected by a Discord bot I built in school</div></div>
+    <div class="feat" role="listitem"><div class="n">Top 10%</div><div class="l">of 7,000+ teams, Amazon ML Challenge 2025</div></div>
+    <div class="feat" role="listitem"><div class="n">50+</div><div class="l">agents and managers using my CRM every day</div></div>
+  </div>
+
+  <div class="sec-h" id="work">
+    <h2>Work, with demos</h2>
+    <span>Each one answers something clients hire for</span>
+  </div>
+
+  <!-- UPI City -->
+  <article class="proj">
+    <div>
+      <p class="tag">Data, evaluation, fraud and risk</p>
+      <h3>UPI City: a test bench that tells you if a fraud model actually works</h3>
+      <p>In production you only see the fraud you caught, never what slipped past, so nobody can say how good a detector is. UPI City simulates a payment network where I inject the fraud myself, so every payment has a known answer and any detector can be scored honestly.</p>
+      <p>It graded eight detectors. Four scored below chance, and none of the off the shelf ones beat simply sorting payments by amount. The video shows mine and the best open source one (PyOD HBOS) scoring the same payments live.</p>
+      <div class="figs">
+        <div class="fig"><div class="n">123,622</div><div class="l">simulated payments, 4,463 fraud</div></div>
+        <div class="fig"><div class="n">15.1x</div><div class="l">my detector's lift over chance</div></div>
+      </div>
+      <p class="stack">Go · Python · PyOD · scikit-learn · AUC-PR</p>
+      <div class="links"><a href="https://github.com/coolboy-dev/UPI-City" target="_blank" rel="noopener">Repo and full leaderboard</a></div>
+    </div>
+    <div class="demo">
+      <div class="demo-h"><b>Live head to head, 55 s</b><span>video</span></div>
+      <video controls preload="metadata" playsinline poster="assets/upi-city-poster.jpg">
+        <source src="assets/upi-city.mp4" type="video/mp4">
+      </video>
+      <div class="demo-h" style="margin-top:18px"><b>Leaderboard: lift over random guessing</b><span>AUC-PR</span></div>
+      <div class="bars lb" id="lb"></div>
+      <p class="note">Dark line = chance. The ceiling was handed the answers, so it marks the best any detector could do.</p>
+    </div>
+  </article>
+
+  <!-- Web server -->
+  <article class="proj">
+    <div>
+      <p class="tag">Backend and performance</p>
+      <h3>A C++ web server that keeps up with nginx</h3>
+      <p>About 1,300 lines of C++17, nothing beyond the standard library and the Linux kernel. One epoll loop per core, a worker pool, an LRU file cache and a per IP rate limiter.</p>
+      <p>Going from one event loop to one per core took it from about 158k to 665k requests a second without touching the workers, the cache or the limiter. Pick a load level on the right to compare it with nginx on the same machine.</p>
+      <div class="figs">
+        <div class="fig"><div class="n">5.5 ms</div><div class="l">p99 at 1,000 connections</div></div>
+        <div class="fig"><div class="n">11.5 MB</div><div class="l">memory under that load</div></div>
+        <div class="fig"><div class="n">0</div><div class="l">failed of 100,000 requests</div></div>
+      </div>
+      <p class="stack">C++17 · epoll · eventfd · GoogleTest · AddressSanitizer · ThreadSanitizer</p>
+      <div class="links"><a href="https://github.com/coolboy-dev/professional-cpp-webserver" target="_blank" rel="noopener">Repo and benchmark scripts</a></div>
+    </div>
+    <div class="demo">
+      <div class="demo-h"><b>Requests a second</b><span>wrk, 30 s per run</span></div>
+      <div class="seg" role="group" aria-label="Open connections" id="conns"></div>
+      <div class="bars" id="ws"></div>
+      <p class="note">28 core laptop over loopback, all three run back to back. Runs vary by up to 20%, and alternating runs put this server and nginx within about 10% of each other, so read it as level.</p>
+    </div>
+  </article>
+
+  <!-- Bill checker -->
+  <article class="proj">
+    <div>
+      <p class="tag">Documents and OCR</p>
+      <h3>A GST bill checker that clears clean bills instantly</h3>
+      <p>Built after reading one cashback app's reviews, where real users' bills sat "under review" for days. It reads an Indian GST bill after OCR and returns approve, review or reject, with reasons.</p>
+      <p>It verifies the GSTIN check digit and repairs one character OCR misread (1 and I, 0 and O), checks that CGST equals SGST and the totals reconcile, and flags the same bill uploaded twice. No model, just arithmetic. Try it: the demo is the real logic running in your browser.</p>
+      <div class="figs">
+        <div class="fig"><div class="n">~8 µs</div><div class="l">per bill in Python</div></div>
+        <div class="fig"><div class="n">0</div><div class="l">dependencies</div></div>
+      </div>
+      <p class="stack">Python standard library · ported to JavaScript for this page</p>
+      <div class="links"><a href="https://github.com/coolboy-dev/bill-check" target="_blank" rel="noopener">Repo</a></div>
+    </div>
+    <div class="demo">
+      <div class="demo-h"><b>Run the checker</b><span>live</span></div>
+      <div class="seg" role="group" aria-label="Example bills" id="scen"></div>
+      <div class="bill">
+        <div class="receipt" aria-label="Bill">
+          <label for="b-gstin">GSTIN <input id="b-gstin" spellcheck="false" autocomplete="off"></label>
+          <div class="r"><span>Bill no</span><span id="b-no"></span></div>
+          <div class="r"><span>Date</span><span id="b-date"></span></div>
+          <hr>
+          <div class="r"><span>Amul Taaza 500ml 2 x 28</span><span>56.00</span></div>
+          <div class="r"><span>Good Day 100g 1 x 30</span><span>30.00</span></div>
+          <hr>
+          <div class="r"><span>Subtotal</span><span>86.00</span></div>
+          <div class="r"><span>CGST</span><span>2.15</span></div>
+          <div class="r"><span>SGST</span><span>2.15</span></div>
+          <label for="b-total"><b>Total</b> <input id="b-total" inputmode="decimal" autocomplete="off"></label>
+        </div>
+        <div class="verdict" id="verdict" aria-live="polite">
+          <div class="vv" id="vv"></div>
+          <ul id="why"></ul>
+          <div class="t" id="vt"></div>
+        </div>
+      </div>
+      <p class="note">Edit the GSTIN or the total to see it react. "Upload again" sends the same bill a second time. Dates are checked as of 4 Oct 2026, the repo's test date.</p>
+    </div>
+  </article>
+
+  <!-- Photo search -->
+  <article class="proj">
+    <div>
+      <p class="tag">ML and computer vision</p>
+      <h3>Private photo search, like Google Photos on your own laptop</h3>
+      <p>Type "a dog catching a frisbee" and the right photos come back. It sorts photos into categories with no training, builds albums by itself, groups people by face and finds near duplicates. Nothing leaves the machine.</p>
+      <p>The same pieces work for product catalogs, inspection photos or document scans.</p>
+      <div class="figs">
+        <div class="fig"><div class="n">13 to 17 ms</div><div class="l">per search over 4,958 photos</div></div>
+        <div class="fig"><div class="n">546</div><div class="l">faces grouped in under 0.1 s</div></div>
+      </div>
+      <p class="stack">Python · CLIP · HDBSCAN · OpenCV YuNet and SFace · perceptual hashing</p>
+      <div class="links"><a href="https://github.com/coolboy-dev/local-photos" target="_blank" rel="noopener">Repo</a></div>
+    </div>
+    <div class="demo tabs-img">
+      <div class="demo-h"><b>Screens from the app</b>
+        <div class="seg" role="group" aria-label="Screen" id="ptabs" style="margin:0">
+          <button type="button" aria-pressed="true" data-src="assets/photo-search.jpg" data-alt="Search results for a dog catching a frisbee">Search</button>
+          <button type="button" aria-pressed="false" data-src="assets/photo-albums.jpg" data-alt="Albums the app found by itself">Albums</button>
+        </div>
+      </div>
+      <img id="pimg" src="assets/photo-search.jpg" alt="Search results for a dog catching a frisbee" loading="lazy" width="1400" height="876">
+    </div>
+  </article>
+
+  <!-- CRM -->
+  <article class="proj">
+    <div>
+      <p class="tag">Adding AI to an existing product</p>
+      <h3>A real estate CRM with an AI advisor, used every day</h3>
+      <p>Built during my internship at Agnayi. More than 50 agents and managers use it daily for leads, a deals pipeline, property listings and a gallery. Leads from Meta ads arrive by themselves, so nobody copies them over by hand.</p>
+      <p>An AI advisor chat sits inside the CRM. Agents ask it questions, upload files for it to read, or have it research the web without leaving the tool. Most of the work went into the layer under it: clean lead data, logins and roles, and one place for everything.</p>
+      <p class="stack">Node.js · JWT auth · Meta Lead Ads · Groq LLM · Tavily web search</p>
+      <p class="private">Private company system, so no public repo or screenshots. Happy to walk through the architecture on a call.</p>
+    </div>
+    <div class="demo">
+      <div class="demo-h"><b>How it fits together</b><span>architecture</span></div>
+      <svg viewBox="0 0 520 250" role="img" aria-label="Meta ads leads flow into the CRM, which holds leads, deals, listings and users, with an AI advisor that can search the web and read files" style="width:100%;height:auto">
+        <g font-family="IBM Plex Sans, system-ui, sans-serif" font-size="13" fill="var(--ink)">
+          <rect x="10" y="95" width="110" height="56" rx="6" fill="var(--ground)" stroke="var(--rule)"/>
+          <text x="65" y="119" text-anchor="middle" font-weight="600">Meta ads</text>
+          <text x="65" y="137" text-anchor="middle" fill="var(--muted)" font-size="11.5">lead forms</text>
+          <rect x="170" y="40" width="190" height="166" rx="8" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="265" y="64" text-anchor="middle" font-weight="700">CRM</text>
+          <text x="265" y="92" text-anchor="middle" fill="var(--muted)" font-size="12">leads · deals pipeline</text>
+          <text x="265" y="112" text-anchor="middle" fill="var(--muted)" font-size="12">listings · gallery</text>
+          <text x="265" y="132" text-anchor="middle" fill="var(--muted)" font-size="12">logins and roles</text>
+          <rect x="190" y="148" width="150" height="42" rx="6" fill="var(--ground)" stroke="var(--rule)"/>
+          <text x="265" y="174" text-anchor="middle" font-weight="600">AI advisor</text>
+          <rect x="400" y="40" width="110" height="56" rx="6" fill="var(--ground)" stroke="var(--rule)"/>
+          <text x="455" y="64" text-anchor="middle" font-weight="600">50+ users</text>
+          <text x="455" y="82" text-anchor="middle" fill="var(--muted)" font-size="11.5">every day</text>
+          <rect x="400" y="148" width="110" height="56" rx="6" fill="var(--ground)" stroke="var(--rule)"/>
+          <text x="455" y="171" text-anchor="middle" font-weight="600">Groq LLM</text>
+          <text x="455" y="189" text-anchor="middle" fill="var(--muted)" font-size="11.5">+ web search</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none">
+          <path d="M120 123H164"/><path d="M158 117l6 6-6 6"/>
+          <path d="M360 68H394"/><path d="M366 62l-6 6 6 6"/><path d="M388 62l6 6-6 6"/>
+          <path d="M340 169H394"/><path d="M388 163l6 6-6 6"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+
+  <!-- Categorizer -->
+  <article class="proj">
+    <div>
+      <p class="tag">AI agents and RAG</p>
+      <h3>Messy bank lines in, clean categories out</h3>
+      <p>UPI transaction lines are unreadable on purpose, and one shop shows up in a dozen spellings, so text matching fails. This pipeline matches on meaning instead: a vector database finds the closest known merchant, and only the strings it can't place go to an LLM.</p>
+      <p>It runs with no GPU, which keeps the cost small. The same order works on product names, invoice lines or CRM fields: cheap matching first, AI for the leftovers.</p>
+      <div class="figs">
+        <div class="fig"><div class="n">50,000+</div><div class="l">transaction strings classified</div></div>
+        <div class="fig"><div class="n">0</div><div class="l">GPUs</div></div>
+      </div>
+      <p class="stack">Go · Python · vector search · RAG · Claude and OpenAI APIs · PostgreSQL</p>
+    </div>
+    <div class="demo">
+      <div class="demo-h"><b>What it does</b><span>illustration</span></div>
+      <div class="example">
+        <span class="in">PAYTM-9876543210@ptybl-2501</span><span class="arr">→</span><span class="out">Food and drink</span>
+      </div>
+      <ol class="steps">
+        <li><b>Vector match</b> against known merchants. Every line goes here first.</li>
+        <li><b>LLM</b> only for the lines the vector search can't place.</li>
+        <li><b>Summary</b> in plain English of where the money went.</li>
+      </ol>
+    </div>
+  </article>
+
+  <div class="sec-h">
+    <h2>More proof</h2>
+    <span>Without demos, with numbers</span>
+  </div>
+  <div class="more">
+    <article>
+      <div class="n">Top 10%</div>
+      <h3>Amazon ML Challenge 2025</h3>
+      <p>Two multimodal pipelines (DINOv2 + MiniLM, CLIP + LightGBM) over 75,000 images, built in about 30 hours through a hardware failure. 7,000+ teams.</p>
+    </article>
+    <article>
+      <div class="n">320,000</div>
+      <h3>Protected, a moderation bot</h3>
+      <p>Built in school in 2022. Anti-raid, auto moderation and logs across 150+ Discord servers, kept running through API deprecations. <a href="https://github.com/coolboy-dev/Protected" target="_blank" rel="noopener">Repo</a></p>
+    </article>
+    <article>
+      <div class="n">Rust</div>
+      <h3>Browser agent environment</h3>
+      <p>Drives real Chrome over the DevTools Protocol so an agent can learn from real clicks and keystrokes, with a parity check against a Python simulator. <a href="https://github.com/coolboy-dev/chromium-rl-env" target="_blank" rel="noopener">Repo</a></p>
+    </article>
+  </div>
+
+  <section id="how">
+    <div class="sec-h">
+      <h2>How we'd work</h2>
+      <span>Small steps, each one paid for what it delivers</span>
+    </div>
+    <div class="how">
+      <div class="step"><p class="k">First</p><h3>A 15 minute call</h3><p>You tell me the problem. I tell you honestly whether I'm the right person, and what I'd build first.</p></div>
+      <div class="step"><p class="k">Then</p><h3>A short fixed sprint</h3><p>A fixed fee and a fixed scope that ends with something working, so you see my work before committing to more.</p></div>
+      <div class="step"><p class="k">If it works</p><h3>Part time, ongoing</h3><p>About 20 hours a week on your repo and your tools, with a short written update every week.</p></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div>
+      <h2>Tell me what you're building.</h2>
+      <p>One paragraph about the product and the problem is enough.</p>
+    </div>
+    <div>
+      <div class="mailbox">
+        <span class="addr" id="addr">dhawanyug4@gmail.com</span>
+        <button class="btn" id="copy" type="button">Copy</button>
+      </div>
+      <div class="meta">
+        <a href="mailto:dhawanyug4@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/yug-dhawan" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/coolboy-dev" target="_blank" rel="noopener">GitHub</a>
+        <a href="assets/Yug_Dhawan_Resume.pdf" download>Resume (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>Project numbers come from each repo's README and benchmark scripts.</footer>
+</div>
+
+<script src="assets/billcheck.js"></script>
+<script>
+// Leaderboard (UPI City README, 123,622 payments)
+(function () {
+  var rows = [["Ceiling (given labels)",26.0,0],["UPI City (mine)",15.1,1],["Sort by amount",3.8,0],["PyOD HBOS",3.3,0],
+    ["sklearn IForest",1.2,0],["PyOD IForest",1.2,0],["Random",1.0,0],["PyOD CBLOF",0.8,0],["PyOD LOF",0.8,0],["PyOD PCA",0.8,0],["PyOD KNN",0.7,0]];
+  var max = 26, el = document.getElementById('lb');
+  el.innerHTML = rows.map(function (r) {
+    return '<div class="brow' + (r[2] ? ' me' : '') + '"><span class="lbl">' + r[0] + '</span><span class="track"><span class="fill" style="width:' +
+      (r[1] / max * 100).toFixed(1) + '%"></span><span class="chance" style="left:' + (1 / max * 100).toFixed(2) + '%"></span></span><span class="v">' + r[1].toFixed(1) + 'x</span></div>';
+  }).join('');
+})();
+
+// Web server (README table, 2026-10-18)
+(function () {
+  var data = {
+    "100":  [[153049,"0.99 ms"],[659495,"2.51 ms"],[525776,"2.30 ms"]],
+    "500":  [[153726,"4.27 ms"],[708134,"4.66 ms"],[562812,"6.36 ms"]],
+    "1,000":[[157532,"7.98 ms"],[664709,"5.52 ms"],[495155,"9.73 ms"]],
+    "2,000":[[153829,"16.80 ms"],[671556,"6.71 ms"],[550215,"11.28 ms"]],
+    "5,000":[[117072,"46.06 ms"],[589644,"12.20 ms"],[519660,"22.87 ms"]]
+  };
+  var names = ["Mine, 1 loop", "Mine, 28 loops", "nginx, 28 workers"], max = 720000;
+  var seg = document.getElementById('conns'), out = document.getElementById('ws');
+  function draw(k) {
+    out.innerHTML = data[k].map(function (d, i) {
+      return '<div class="brow' + (i === 1 ? ' me' : '') + '"><span class="lbl">' + names[i] + '</span><span class="track"><span class="fill" style="width:' +
+        (d[0] / max * 100).toFixed(1) + '%"></span></span><span class="v">' + Math.round(d[0] / 1000) + 'k<small>p99 ' + d[1] + '</small></span></div>';
+    }).join('');
+    [].forEach.call(seg.children, function (b) { b.setAttribute('aria-pressed', b.dataset.k === k); });
+  }
+  Object.keys(data).forEach(function (k) {
+    var b = document.createElement('button'); b.type = 'button'; b.dataset.k = k; b.textContent = k + ' conns';
+    b.addEventListener('click', function () { draw(k); }); seg.appendChild(b);
+  });
+  draw("1,000");
+})();
+
+// Bill checker demo
+(function () {
+  var TODAY = "2026-10-04";
+  var base = { gstin: "27AAPFU0939F1ZV", bill_no: "INV-1042", date: "2026-10-02",
+    items: [{ name: "Amul Taaza 500ml", qty: 2, rate: 28, amount: 56 }, { name: "Britannia Good Day 100g", qty: 1, rate: 30, amount: 30 }],
+    subtotal: 86, cgst: 2.15, sgst: 2.15, total: 90.30 };
+  var scen = [
+    ["Clean bill", {}],
+    ["OCR misread", { gstin: "27AAPFU0939FIZV", bill_no: "INV-1043" }],
+    ["Edited total", { total: 990.30, bill_no: "INV-1044" }],
+    ["Fake GSTIN", { gstin: "27AAPFU0939F1ZQ", bill_no: "INV-1045" }],
+    ["Future date", { date: "2026-11-02", bill_no: "INV-1046" }],
+    ["Upload again", null]
+  ];
+  var cur = Object.assign({}, base), seen = new Set();
+  var $ = function (id) { return document.getElementById(id); };
+  var seg = $('scen'), gIn = $('b-gstin'), tIn = $('b-total');
+  function fill() { gIn.value = cur.gstin; tIn.value = cur.total.toFixed(2); $('b-no').textContent = cur.bill_no; $('b-date').textContent = cur.date; }
+  function run(fresh) {
+    if (fresh) seen = new Set();
+    var t0 = performance.now(), r = checkBill(cur, seen, TODAY), ms = performance.now() - t0;
+    $('verdict').dataset.v = r[0]; $('vv').textContent = r[0];
+    $('why').innerHTML = r[1].length ? r[1].map(function (w) { return '<li>' + w.replace(/</g, '&lt;') + '</li>'; }).join('') : '<li>Every check passed.</li>';
+    $('vt').textContent = 'checked in ' + (ms < 0.1 ? '<0.1' : ms.toFixed(2)) + ' ms in your browser';
+  }
+  scen.forEach(function (s, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = s[0]; b.setAttribute('aria-pressed', i === 0);
+    b.addEventListener('click', function () {
+      [].forEach.call(seg.children, function (x) { x.setAttribute('aria-pressed', x === b); });
+      if (s[1] === null) {   // clean bill accepted once, then the same bill again: duplicate check fires
+        cur = Object.assign({}, base); fill(); seen = new Set(); checkBill(cur, seen, TODAY); run(false); return;
+      }
+      cur = Object.assign({}, base, s[1]); fill(); run(true);
+    });
+    seg.appendChild(b);
+  });
+  gIn.addEventListener('input', function () { cur.gstin = gIn.value; run(true); });
+  tIn.addEventListener('input', function () { var v = parseFloat(tIn.value); if (!isNaN(v)) { cur.total = v; run(true); } });
+  fill(); run(true);
+})();
+
+// Photo tabs
+(function () {
+  var seg = document.getElementById('ptabs'), img = document.getElementById('pimg');
+  [].forEach.call(seg.children, function (b) {
+    b.addEventListener('click', function () {
+      [].forEach.call(seg.children, function (x) { x.setAttribute('aria-pressed', x === b); });
+      img.src = b.dataset.src; img.alt = b.dataset.alt;
+    });
+  });
+})();
+
+// Copy email
+document.getElementById('copy').addEventListener('click', function () {
+  var btn = this, el = document.getElementById('addr');
+  function selectIt() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected'; }
+  try { navigator.clipboard.writeText(el.textContent).then(function () { btn.textContent = 'Copied'; }, selectIt); } catch (e) { selectIt(); }
+});
+</script>
+</body>
+</html>
