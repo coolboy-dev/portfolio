@@ -54,8 +54,8 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
 .intro p{font-size:18px;margin:0 0 14px;color:var(--ink)}
 .intro .sub{color:var(--muted);font-size:16px}
 
-.proj{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:clamp(20px,4vw,48px);padding-block:44px;border-top:1px solid var(--rule);align-items:start}
-.proj h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,2.8vw,30px);letter-spacing:-.015em;line-height:1.15;margin:0 0 12px}
+.proj{scroll-margin-top:72px;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:clamp(20px,4vw,48px);padding-block:44px;border-top:1px solid var(--rule);align-items:start}
+.proj h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,2.8vw,30px);letter-spacing:-.012em;line-height:1.15;margin:0 0 12px}
 .proj p{margin:0 0 12px}
 .meta{font-size:14px;color:var(--muted);margin-top:16px}
 .meta a{margin-right:14px}
@@ -94,12 +94,22 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
 .verdict ul{margin:8px 0 0;padding-left:18px;font-size:14px}
 .verdict .t{font-size:12.5px;color:var(--muted);margin-top:8px}
 
-.also{border-top:1px solid var(--rule);padding-top:40px}
-.also h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0 0 6px}
-.also dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);}
-.also .row{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;padding-block:16px;border-bottom:1px solid var(--rule)}
-.also dt{font-weight:600}
-.also dd{margin:0}
+
+.diagram{width:100%;height:auto;display:block}
+.dg rect{fill:var(--ground);stroke:var(--rule);stroke-width:1.2}
+.dg rect.hl{fill:var(--panel);stroke:var(--accent);stroke-width:1.6}
+.dg text{text-anchor:middle;font-family:var(--body);fill:var(--ink)}
+.dg .t1{font-size:14px;font-weight:600}
+.dg .t2{font-size:12px;fill:var(--muted)}
+.mono-in{font-family:var(--mono);font-size:.88em;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+
+/* translucent header that content scrolls under */
+header{position:sticky;top:0;z-index:5;margin-inline:calc(-1 * clamp(16px,4vw,40px));padding-inline:clamp(16px,4vw,40px);
+  background:color-mix(in srgb, var(--ground) 78%, transparent);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%)}
+@media (prefers-reduced-transparency:reduce){header{background:var(--ground);backdrop-filter:none;-webkit-backdrop-filter:none}}
+/* instant press feedback */
+.btn,.seg button{transition:transform 100ms ease-out}
+.btn:active,.seg button:active{transform:scale(.97)}
 
 .contact{margin-top:56px;padding:32px;border-radius:10px;background:var(--ink);color:var(--ground)}
 .contact h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,32px);margin:0 0 10px}
@@ -112,7 +122,6 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
 
 @media (max-width:860px){
   .proj{grid-template-columns:1fr}
-  .also .row{grid-template-columns:1fr;gap:4px}
 }
 @media (max-width:600px){
   .bill{grid-template-columns:1fr}
@@ -120,7 +129,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
   header nav .hide-sm{display:none}
   .contact{padding:22px}
 }
-@media (prefers-reduced-motion:reduce){.brow .fill{transition:none}}
+@media (prefers-reduced-motion:reduce){.brow .fill,.btn,.seg button{transition:none}.btn:active,.seg button:active{transform:none}}
 </style>
 </head>
 <body>
@@ -136,7 +145,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
 
   <section class="intro">
     <h1>I build backends and AI features for startups.</h1>
-    <p>Most of my work is adding LLM features to products that already exist, and making the backend under them fast. Here are four things I've built, each with a demo.</p>
+    <p>Most of my work is adding LLM features to products that already exist and making the backend under them fast. Below is what I've built, with something to watch or try for each.</p>
     <p class="sub">Final year engineering student in New Delhi. My hours overlap a full European working day and US mornings.</p>
   </section>
 
@@ -179,7 +188,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
     <div>
       <h2>GST bill checker</h2>
       <p>A cashback app's users were waiting days for their shopping bills to be approved. This checks a bill read by OCR in microseconds and says approve, review or reject, with the reason.</p>
-      <p>It catches fake or misread GSTINs, totals that were edited, and the same bill uploaded twice. No AI needed, just arithmetic. The demo on the right is the real code running in your browser.</p>
+      <p>It catches fake or misread GSTINs and edited totals, and it notices when the same bill comes in twice. There's no AI in it, only arithmetic, and the demo here runs the real logic in your browser.</p>
       <p class="meta"><a href="https://github.com/coolboy-dev/bill-check" target="_blank" rel="noopener">Code</a>Python, no dependencies</p>
     </div>
     <div class="demo">
@@ -225,15 +234,101 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
     </div>
   </article>
 
-  <section class="also">
-    <h2>Also</h2>
-    <dl>
-      <div class="row"><dt>Real estate CRM</dt><dd>At my internship I built the CRM that 50+ agents and managers use every day, with leads from Meta ads flowing in automatically and an AI chat that can search the web and read files. It's company code, so there's nothing public to show.</dd></div>
-      <div class="row"><dt>Transaction categorizer</dt><dd>Turns 50,000+ unreadable UPI bank lines into categories. A vector search matches most of them, and only the leftovers go to an LLM, so it runs without a GPU.</dd></div>
-      <div class="row"><dt>Amazon ML Challenge 2025</dt><dd>Top 10% of more than 7,000 teams, with two image and text models over 75,000 product images, built in about 30 hours.</dd></div>
-      <div class="row"><dt>Protected</dt><dd>A Discord moderation bot I built in school in 2022. It ended up protecting 320,000 users across 150+ servers. <a href="https://github.com/coolboy-dev/Protected" target="_blank" rel="noopener">Code</a></dd></div>
-    </dl>
-  </section>
+  <article class="proj" id="crm">
+    <div>
+      <h2>Real estate CRM</h2>
+      <p>During my internship at Agnayi I built the CRM their agents and managers work in every day. More than 50 people use it to track leads and deals, and leads from Meta ads arrive on their own instead of being copied over by hand.</p>
+      <p>It also has an AI advisor chat that reads files agents upload and searches the web for them, so they get answers without leaving the CRM.</p>
+      <p class="meta">Node.js, Groq, Meta Lead Ads<br>Company code, so there are no screenshots. I'm happy to walk through it on a call.</p>
+    </div>
+    <div class="demo">
+      <p class="label">How the pieces connect</p>
+      <svg class="diagram" viewBox="0 0 560 260" role="img" aria-label="Leads from Meta ads flow into the CRM. Agents use the CRM, which has an AI advisor backed by a Groq model and web search.">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+        <g class="dg">
+          <rect x="8" y="98" width="118" height="60" rx="8"/><text x="67" y="124" class="t1">Meta ads</text><text x="67" y="143" class="t2">lead forms</text>
+          <rect x="176" y="30" width="200" height="200" rx="10" class="hl"/><text x="276" y="58" class="t1">CRM</text>
+          <text x="276" y="86" class="t2">leads and deals</text><text x="276" y="106" class="t2">property listings</text><text x="276" y="126" class="t2">logins and roles</text>
+          <rect x="196" y="154" width="160" height="56" rx="8"/><text x="276" y="178" class="t1">AI advisor</text><text x="276" y="196" class="t2">chat, files, web</text>
+          <rect x="430" y="30" width="122" height="60" rx="8"/><text x="491" y="56" class="t1">50+ agents</text><text x="491" y="75" class="t2">every day</text>
+          <rect x="430" y="154" width="122" height="56" rx="8"/><text x="491" y="178" class="t1">Groq LLM</text><text x="491" y="196" class="t2">+ web search</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M126 128H172"/><path d="M380 60H426"/><path d="M356 182H426"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+
+  <article class="proj" id="categorizer">
+    <div>
+      <h2>Transaction categorizer</h2>
+      <p>Bank statements in India are full of lines like <span class="mono-in">PAYTM-9876543210@ptybl-2501</span>, and the same shop shows up in a dozen spellings. This pipeline sorted 50,000+ of them into categories with a plain English summary.</p>
+      <p>A vector search places most lines by meaning. Only the ones it can't place go to an LLM, which kept it cheap enough to run without a GPU.</p>
+      <p class="meta">Go, Python, vector search, Claude and OpenAI APIs</p>
+    </div>
+    <div class="demo">
+      <p class="label">Where each line goes</p>
+      <svg class="diagram" viewBox="0 0 560 230" role="img" aria-label="Raw bank lines go to a vector search against known merchants. Matched lines get a category directly. Unmatched lines go to an LLM. Everything ends in categories and a summary.">
+        <g class="dg">
+          <rect x="8" y="80" width="130" height="70" rx="8"/><text x="73" y="108" class="t1">Raw lines</text><text x="73" y="127" class="t2">50,000+</text>
+          <rect x="190" y="80" width="150" height="70" rx="8" class="hl"/><text x="265" y="108" class="t1">Vector search</text><text x="265" y="127" class="t2">known merchants</text>
+          <rect x="392" y="14" width="160" height="62" rx="8"/><text x="472" y="40" class="t1">Category</text><text x="472" y="59" class="t2">matched by meaning</text>
+          <rect x="392" y="154" width="160" height="62" rx="8"/><text x="472" y="180" class="t1">LLM</text><text x="472" y="199" class="t2">only the leftovers</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M138 115H186"/><path d="M340 104L388 52"/><path d="M340 126L388 180"/>
+        </g>
+      </svg>
+      <p class="cap">No GPU anywhere. The model is only called when matching by meaning fails.</p>
+    </div>
+  </article>
+
+  <article class="proj" id="amazon-ml">
+    <div>
+      <h2>Amazon ML Challenge 2025</h2>
+      <p>Placed in the top 10% of more than 7,000 teams. In about 30 hours, and through a hardware failure halfway in, I built two models that read product images and text together.</p>
+      <p>A 50 thread downloader pulled the 75,000 training images. Both models were cross validated before submission.</p>
+      <p class="meta">PyTorch, Hugging Face, DINOv2, CLIP, LightGBM</p>
+    </div>
+    <div class="demo">
+      <p class="label">The two models</p>
+      <svg class="diagram" viewBox="0 0 560 250" role="img" aria-label="Model one combines DINOv2 image features and MiniLM text features into a 1024 number vector and feeds an MLP. Model two uses CLIP features with LightGBM.">
+        <g class="dg">
+          <rect x="8" y="20" width="130" height="50" rx="8"/><text x="73" y="50" class="t1">Image</text>
+          <rect x="8" y="90" width="130" height="50" rx="8"/><text x="73" y="120" class="t1">Text</text>
+          <rect x="190" y="20" width="130" height="50" rx="8"/><text x="255" y="50" class="t1">DINOv2</text>
+          <rect x="190" y="90" width="130" height="50" rx="8"/><text x="255" y="120" class="t1">MiniLM</text>
+          <rect x="372" y="44" width="180" height="72" rx="8" class="hl"/><text x="462" y="74" class="t1">1024 numbers</text><text x="462" y="94" class="t2">into an MLP</text>
+          <rect x="8" y="178" width="130" height="50" rx="8"/><text x="73" y="208" class="t1">Image + text</text>
+          <rect x="190" y="178" width="130" height="50" rx="8"/><text x="255" y="208" class="t1">CLIP</text>
+          <rect x="372" y="178" width="180" height="50" rx="8" class="hl"/><text x="462" y="208" class="t1">LightGBM</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M138 45H186"/><path d="M138 115H186"/><path d="M320 45L368 70"/><path d="M320 115L368 92"/>
+          <path d="M138 203H186"/><path d="M320 203H368"/>
+        </g>
+        <g font-family="var(--body)" font-size="12" fill="var(--muted)"><text x="8" y="166">Model two</text><text x="8" y="12">Model one</text></g>
+      </svg>
+    </div>
+  </article>
+
+  <article class="proj" id="protected">
+    <div>
+      <h2>Protected</h2>
+      <p>A Discord bot I built in school in 2022 that stops server takeovers. When someone who isn't the owner or a trusted admin starts deleting channels or banning members, it undoes what it can and bans them.</p>
+      <p>At its peak it watched over 150+ servers with 320,000 users between them.</p>
+      <p class="meta">Python, discord.py, MongoDB</p>
+    </div>
+    <div class="demo">
+      <p class="label">Try it: who does what?</p>
+      <div class="seg" role="group" aria-label="Who" id="p-who"></div>
+      <div class="seg" role="group" aria-label="Action" id="p-act"></div>
+      <div class="verdict" id="p-out" aria-live="polite"><div class="vv" id="p-vv"></div><ul id="p-why"></ul></div>
+      <p class="cap">Every rule here comes from the bot's six protection modules, which check the server's audit log after each change.</p>
+    </div>
+  </article>
+
 
   <section class="contact" id="contact">
     <h2>Tell me what you're building.</h2>
@@ -337,6 +432,39 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.6vw,48px);l
       img.src = b.dataset.src; img.alt = b.dataset.alt; img.width = b.dataset.w; img.height = b.dataset.h; cap.textContent = b.dataset.cap.replace(/&quot;/g, '"');
     });
   });
+})();
+
+
+// Protected: rules from the six cogs (Antiban, Antibotadd, Antichannel, Antirole, Antiwebhook)
+(function () {
+  var who = [["Server owner","owner"],["Trusted admin","trusted"],["Anyone else","other"]];
+  var acts = [
+    ["Deletes a channel", ["They get banned."]],
+    ["Creates a channel", ["The channel is deleted.","They get banned."]],
+    ["Bans a member", ["The member is unbanned.","They get banned."]],
+    ["Adds a bot", ["The bot is banned.","They get banned."]],
+    ["Changes a role", ["They get banned."]],
+    ["Creates a webhook", ["They get banned."]]
+  ];
+  var w = "other", a = 0, $ = function (id) { return document.getElementById(id); };
+  function draw() {
+    var ok = w !== "other";
+    $('p-out').dataset.v = ok ? "approve" : "reject";
+    $('p-vv').textContent = ok ? "Allowed" : "Blocked";
+    $('p-why').innerHTML = ok ? '<li>The owner and whitelisted admins can change anything.</li>'
+      : acts[a][1].map(function (x) { return '<li>' + x + '</li>'; }).join('');
+  }
+  function seg(el, items, cur, set) {
+    items.forEach(function (it, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = it[0];
+      b.setAttribute('aria-pressed', (it[1] === cur) || (i === cur));
+      b.addEventListener('click', function () { [].forEach.call(el.children, function (x) { x.setAttribute('aria-pressed', x === b); }); set(it[1] !== undefined && typeof it[1] === 'string' ? it[1] : i); draw(); });
+      el.appendChild(b);
+    });
+  }
+  seg($('p-who'), who, w, function (v) { w = v; });
+  seg($('p-act'), acts, a, function (v) { a = v; });
+  draw();
 })();
 
 document.getElementById('copy').addEventListener('click', function () {
