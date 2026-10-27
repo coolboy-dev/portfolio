@@ -25,7 +25,7 @@ function repairGstin(g) {
   return good.length === 1 ? good[0] : null;
 }
 
-function checkBill(bill, seen, today) {
+export function checkBill(bill, seen, today) {
   today = today || new Date().toISOString().slice(0, 10);
   const hard = [], soft = [];
   let g = (bill.gstin || "").toUpperCase().replace(/ /g, "");
@@ -61,4 +61,3 @@ function checkBill(bill, seen, today) {
   return [verdict, hard.concat(soft)];
 }
 
-if (typeof module !== "undefined") module.exports = { checkBill, gstinOk, repairGstin };

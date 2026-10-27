@@ -1,0 +1,179 @@
+<article class="proj" id="upi-city">
+    <div>
+      <h2>UPI City</h2>
+      <p>A simulated payment network for testing fraud detectors. Because I inject the fraud myself, I know the right answer for all 123,622 payments and can score any detector honestly.</p>
+      <p>I tested eight. Four did worse than random guessing, and none of the open source ones beat simply sorting payments by amount. Mine was 15 times better than chance.</p>
+      <p class="meta"><a href="https://github.com/coolboy-dev/UPI-City" target="_blank" rel="noopener">Code</a>Go, Python, PyOD</p>
+    </div>
+    <div class="demo">
+      <video controls preload="metadata" playsinline poster="assets/upi-city-intro-poster.jpg">
+        <source src="assets/upi-city-intro.mp4" type="video/mp4">
+      </video>
+      <p class="cap">What UPI City is, in 23 seconds, with sound. <a href="assets/upi-city.mp4" target="_blank" rel="noopener">Watch it running</a>: my detector and the best open source one scoring the same payments live (55 s).</p>
+      <div class="lb">
+        <p class="dlabel">How many times better than random guessing</p>
+        <div class="bars" id="lb"></div>
+        <p class="cap">The top row was given the answers, so it's the best any detector could do. Four more open source detectors scored below 1.0.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="proj" id="server">
+    <div>
+      <h2>A C++ web server</h2>
+      <p>About 1,300 lines of C++ with no dependencies. With one event loop per CPU core it handles around 665,000 requests a second, roughly level with nginx on the same laptop, in under 12 MB of memory.</p>
+      <p>The jump from one loop to many didn't touch the rest of the code: the workers, the cache and the rate limiter stayed the same.</p>
+      <p class="meta"><a href="https://github.com/coolboy-dev/professional-cpp-webserver" target="_blank" rel="noopener">Code and benchmarks</a>C++17, epoll</p>
+    </div>
+    <div class="demo">
+      <p class="dlabel">Requests a second, by open connections</p>
+      <div class="seg" role="group" aria-label="Open connections" id="conns"></div>
+      <div class="bars" id="ws"></div>
+      <p class="cap">Same 28 core laptop, run back to back. Results move by up to 20% between runs, so treat this server and nginx as level.</p>
+    </div>
+  </article>
+
+  <article class="proj" id="bills">
+    <div>
+      <h2>GST bill checker</h2>
+      <p>A cashback app's users were waiting days for their shopping bills to be approved. This checks a bill read by OCR in microseconds and says approve, review or reject, with the reason.</p>
+      <p>It catches fake or misread GSTINs and edited totals, and it notices when the same bill comes in twice. There's no AI in it, only arithmetic, and the demo here runs the real logic in your browser.</p>
+      <p class="meta"><a href="https://github.com/coolboy-dev/bill-check" target="_blank" rel="noopener">Code</a>Python, no dependencies</p>
+    </div>
+    <div class="demo">
+      <div class="seg" role="group" aria-label="Example bills" id="scen"></div>
+      <div class="bill">
+        <div class="receipt" aria-label="Bill">
+          <label for="b-gstin">GSTIN <input id="b-gstin" spellcheck="false" autocomplete="off"></label>
+          <div class="r"><span>Bill no</span><span id="b-no"></span></div>
+          <div class="r"><span>Date</span><span id="b-date"></span></div>
+          <hr>
+          <div class="r"><span>Amul Taaza 500ml 2 x 28</span><span>56.00</span></div>
+          <div class="r"><span>Good Day 100g 1 x 30</span><span>30.00</span></div>
+          <hr>
+          <div class="r"><span>Subtotal</span><span>86.00</span></div>
+          <div class="r"><span>CGST</span><span>2.15</span></div>
+          <div class="r"><span>SGST</span><span>2.15</span></div>
+          <label for="b-total"><b>Total</b> <input id="b-total" inputmode="decimal" autocomplete="off"></label>
+        </div>
+        <div class="verdict" id="verdict" aria-live="polite">
+          <div class="vv" id="vv"></div>
+          <ul id="why"></ul>
+          <div class="t" id="vt"></div>
+        </div>
+      </div>
+      <p class="cap">Pick an example or type into the GSTIN and total.</p>
+    </div>
+  </article>
+
+  <article class="proj" id="photos">
+    <div>
+      <h2>Private photo search</h2>
+      <p>Search your own photos by describing them, like "a dog catching a frisbee". It also sorts them into albums by itself and groups people by face. It runs on a laptop and nothing gets uploaded.</p>
+      <p>A search over 4,958 photos takes 13 to 17 ms. The same approach works for product catalogs or inspection photos.</p>
+      <p class="meta"><a href="https://github.com/coolboy-dev/local-photos" target="_blank" rel="noopener">Code</a>Python, CLIP, OpenCV</p>
+    </div>
+    <div class="demo">
+      <div class="seg" role="group" aria-label="Screen" id="ptabs">
+        <button type="button" aria-pressed="true" data-src="assets/photo-search.jpg" data-w="1330" data-h="466" data-alt="Results for the search a dog catching a frisbee, 120 matches in 10.7 ms" data-cap="Searching 4,958 photos for &quot;a dog catching a frisbee&quot;.">Search</button>
+        <button type="button" aria-pressed="false" data-src="assets/photo-albums.jpg" data-w="1330" data-h="600" data-alt="Albums found automatically: Street, Food, Sports Match, Wild Animals and more" data-cap="Albums it found and named by itself, with no labels or training.">Albums</button>
+      </div>
+      <img class="shot" id="pimg" src="assets/photo-search.jpg" width="1330" height="466" alt="Results for the search a dog catching a frisbee, 120 matches in 10.7 ms" loading="lazy">
+      <p class="cap" id="pcap">Searching 4,958 photos for "a dog catching a frisbee".</p>
+    </div>
+  </article>
+
+  <article class="proj" id="crm">
+    <div>
+      <h2>Real estate CRM</h2>
+      <p>During my internship at Agnayi I built the CRM their agents and managers work in every day. More than 50 people use it to track leads and deals, and leads from Meta ads arrive on their own instead of being copied over by hand.</p>
+      <p>It also has an AI advisor chat that reads files agents upload and searches the web for them, so they get answers without leaving the CRM.</p>
+      <p class="meta">Node.js, Groq, Meta Lead Ads<br>Company code, so there are no screenshots. I'm happy to walk through it on a call.</p>
+    </div>
+    <div class="demo">
+      <p class="dlabel">How the pieces connect</p>
+      <svg class="diagram" viewBox="0 0 560 260" role="img" aria-label="Leads from Meta ads flow into the CRM. Agents use the CRM, which has an AI advisor backed by a Groq model and web search.">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+        <g class="dg">
+          <rect x="8" y="98" width="118" height="60" rx="8"/><text x="67" y="124" class="t1">Meta ads</text><text x="67" y="143" class="t2">lead forms</text>
+          <rect x="176" y="30" width="200" height="200" rx="10" class="hl"/><text x="276" y="58" class="t1">CRM</text>
+          <text x="276" y="86" class="t2">leads and deals</text><text x="276" y="106" class="t2">property listings</text><text x="276" y="126" class="t2">logins and roles</text>
+          <rect x="196" y="154" width="160" height="56" rx="8"/><text x="276" y="178" class="t1">AI advisor</text><text x="276" y="196" class="t2">chat, files, web</text>
+          <rect x="430" y="30" width="122" height="60" rx="8"/><text x="491" y="56" class="t1">50+ agents</text><text x="491" y="75" class="t2">every day</text>
+          <rect x="430" y="154" width="122" height="56" rx="8"/><text x="491" y="178" class="t1">Groq LLM</text><text x="491" y="196" class="t2">+ web search</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M126 128H172"/><path d="M380 60H426"/><path d="M356 182H426"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+
+  <article class="proj" id="categorizer">
+    <div>
+      <h2>Transaction categorizer</h2>
+      <p>Bank statements in India are full of lines like <span class="mono-in">PAYTM-9876543210@ptybl-2501</span>, and the same shop shows up in a dozen spellings. This pipeline sorted 50,000+ of them into categories with a plain English summary.</p>
+      <p>A vector search places most lines by meaning. Only the ones it can't place go to an LLM, which kept it cheap enough to run without a GPU.</p>
+      <p class="meta">Go, Python, vector search, Claude and OpenAI APIs</p>
+    </div>
+    <div class="demo">
+      <p class="dlabel">Where each line goes</p>
+      <svg class="diagram" viewBox="0 0 560 230" role="img" aria-label="Raw bank lines go to a vector search against known merchants. Matched lines get a category directly. Unmatched lines go to an LLM. Everything ends in categories and a summary.">
+        <g class="dg">
+          <rect x="8" y="80" width="130" height="70" rx="8"/><text x="73" y="108" class="t1">Raw lines</text><text x="73" y="127" class="t2">50,000+</text>
+          <rect x="190" y="80" width="150" height="70" rx="8" class="hl"/><text x="265" y="108" class="t1">Vector search</text><text x="265" y="127" class="t2">known merchants</text>
+          <rect x="392" y="14" width="160" height="62" rx="8"/><text x="472" y="40" class="t1">Category</text><text x="472" y="59" class="t2">matched by meaning</text>
+          <rect x="392" y="154" width="160" height="62" rx="8"/><text x="472" y="180" class="t1">LLM</text><text x="472" y="199" class="t2">only the leftovers</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M138 115H186"/><path d="M340 104L388 52"/><path d="M340 126L388 180"/>
+        </g>
+      </svg>
+      <p class="cap">No GPU anywhere. The model is only called when matching by meaning fails.</p>
+    </div>
+  </article>
+
+  <article class="proj" id="amazon-ml">
+    <div>
+      <h2>Amazon ML Challenge 2025</h2>
+      <p>Placed in the top 10% of more than 7,000 teams. In about 30 hours, and through a hardware failure halfway in, I built two models that read product images and text together.</p>
+      <p>A 50 thread downloader pulled the 75,000 training images. Both models were cross validated before submission.</p>
+      <p class="meta">PyTorch, Hugging Face, DINOv2, CLIP, LightGBM</p>
+    </div>
+    <div class="demo">
+      <p class="dlabel">The two models</p>
+      <svg class="diagram" viewBox="0 0 560 250" role="img" aria-label="Model one combines DINOv2 image features and MiniLM text features into a 1024 number vector and feeds an MLP. Model two uses CLIP features with LightGBM.">
+        <g class="dg">
+          <rect x="8" y="20" width="130" height="50" rx="8"/><text x="73" y="50" class="t1">Image</text>
+          <rect x="8" y="90" width="130" height="50" rx="8"/><text x="73" y="120" class="t1">Text</text>
+          <rect x="190" y="20" width="130" height="50" rx="8"/><text x="255" y="50" class="t1">DINOv2</text>
+          <rect x="190" y="90" width="130" height="50" rx="8"/><text x="255" y="120" class="t1">MiniLM</text>
+          <rect x="372" y="44" width="180" height="72" rx="8" class="hl"/><text x="462" y="74" class="t1">1024 numbers</text><text x="462" y="94" class="t2">into an MLP</text>
+          <rect x="8" y="178" width="130" height="50" rx="8"/><text x="73" y="208" class="t1">Image + text</text>
+          <rect x="190" y="178" width="130" height="50" rx="8"/><text x="255" y="208" class="t1">CLIP</text>
+          <rect x="372" y="178" width="180" height="50" rx="8" class="hl"/><text x="462" y="208" class="t1">LightGBM</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+          <path d="M138 45H186"/><path d="M138 115H186"/><path d="M320 45L368 70"/><path d="M320 115L368 92"/>
+          <path d="M138 203H186"/><path d="M320 203H368"/>
+        </g>
+        <g font-family="var(--body)" font-size="12" fill="var(--muted)"><text x="8" y="166">Model two</text><text x="8" y="12">Model one</text></g>
+      </svg>
+    </div>
+  </article>
+
+  <article class="proj" id="protected">
+    <div>
+      <h2>Protected</h2>
+      <p>A Discord bot I built in school in 2022 that stops server takeovers. When someone who isn't the owner or a trusted admin starts deleting channels or banning members, it undoes what it can and bans them.</p>
+      <p>At its peak it watched over 150+ servers with 320,000 users between them.</p>
+      <p class="meta">Python, discord.py, MongoDB</p>
+    </div>
+    <div class="demo">
+      <p class="dlabel">Try it: who does what?</p>
+      <div class="seg" role="group" aria-label="Who" id="p-who"></div>
+      <div class="seg" role="group" aria-label="Action" id="p-act"></div>
+      <div class="verdict" id="p-out" aria-live="polite"><div class="vv" id="p-vv"></div><ul id="p-why"></ul></div>
+      <p class="cap">Every rule here comes from the bot's six protection modules, which check the server's audit log after each change.</p>
+    </div>
+  </article>
